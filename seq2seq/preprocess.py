@@ -9,7 +9,7 @@ from tqdm import tqdm
 from konlpy.tag import Okt
 
 
-FILTERS = "([~.,!?\"':;)(])"
+FILTERS = "([,!?\"':;)(])"
 PAD = "<PAD>"
 STD = "<SOS>"
 END = "<END>"
@@ -45,8 +45,7 @@ def data_tokenizer(data):
         sentence = re.sub(CHANGE_FILTER, "", sentence)
         for word in sentence.split():
             words.append(word)
-    # 토그나이징과 정규표현식을 통해 만들어진
-    # 값들을 넘겨 준다.
+    # 토그나이징과 정규표현식을 통해 만들어진값들을 넘겨 준다.
     return [word for word in words if word]
 
 

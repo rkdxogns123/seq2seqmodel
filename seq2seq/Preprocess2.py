@@ -1,7 +1,7 @@
 from preprocess import *
 
-PATH = 'C:\\learn\\ChatBotData.csv_short.csv'
-VOCAB_PATH = 'C:\\learn\\vocab\\vocabulary1.txt'
+PATH = 'C:\\learn\\WoosongData.csv'
+VOCAB_PATH = 'C:\\learn\\vocab\\vocabulary3.txt'
 
 inputs, outputs = load_data(PATH)
 
@@ -21,10 +21,10 @@ data_configs['end_symbol'] = END
 data_configs['unk_symbol'] = UNK
 
 DATA_IN_PATH = 'C:\\learn\\vocab\\in\\'
-TRAIN_INPUTS = 'train_inputs1.npy'
-TRAIN_OUTPUTS = 'train_outputs1.npy'
-TRAIN_TARGETS = 'train_targets1.npy'
-DATA_CONFIGS = 'data_configs1.json'
+TRAIN_INPUTS = 'train_inputs3.npy'
+TRAIN_OUTPUTS = 'train_outputs3.npy'
+TRAIN_TARGETS = 'train_targets3.npy'
+DATA_CONFIGS = 'data_configs3.json'
 
 np.save(open(DATA_IN_PATH + TRAIN_INPUTS, 'wb'), index_inputs)
 np.save(open(DATA_IN_PATH + TRAIN_OUTPUTS , 'wb'), index_outputs)

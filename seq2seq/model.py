@@ -8,12 +8,22 @@ import matplotlib.pyplot as plt
 from preprocess import *
 
 
+
+def plot_graphs(history, string):
+    plt.plot(history.history[string])
+    plt.plot(history.history['val_'+string], '')
+    plt.xlabel("Epochs")
+    plt.ylabel(string)
+    plt.legend([string, 'val_'+string])
+    plt.show()
+
+
 DATA_IN_PATH = 'C:\\learn\\vocab\\in\\'
 DATA_OUT_PATH = 'C:\\learn\\vocab\\out\\'
-TRAIN_INPUTS = 'train_inputs1.npy'
-TRAIN_OUTPUTS = 'train_outputs1.npy'
-TRAIN_TARGETS = 'train_targets1.npy'
-DATA_CONFIGS = 'data_configs1.json'
+TRAIN_INPUTS = 'train_inputs3.npy'
+TRAIN_OUTPUTS = 'train_outputs3.npy'
+TRAIN_TARGETS = 'train_targets3.npy'
+DATA_CONFIGS = 'data_configs3.json'
 
 SEED_NUM = 1234
 tf.random.set_seed(SEED_NUM)
@@ -24,15 +34,15 @@ index_targets = np.load(open(DATA_IN_PATH + TRAIN_TARGETS, 'rb'))
 prepro_configs = json.load(open(DATA_IN_PATH + DATA_CONFIGS, 'r'))
 
 # Show length
-print(len(index_inputs),  len(index_outputs), len(index_targets))
+# print(len(index_inputs),  len(index_outputs), len(index_targets))
 
 MODEL_NAME = 'seq2seq_kor'
 BATCH_SIZE = 2
-MAX_SEQUENCE = 25
-EPOCH = 5
+MAX_SEQUENCE = 100
+EPOCH = 25
 UNITS = 1024
 EMBEDDING_DIM = 256
-VALIDATION_SPLIT = 0.1
+VALIDATION_SPLIT = 0.2
 
 char2idx = prepro_configs['char2idx']
 idx2char = prepro_configs['idx2char']
@@ -189,7 +199,7 @@ class seq2seq(tf.keras.Model):
 
 model = seq2seq(vocab_size, EMBEDDING_DIM, UNITS, UNITS, BATCH_SIZE, char2idx[end_index])
 model.compile(loss=loss, optimizer=tf.keras.optimizers.Adam(1e-3), metrics=[accuracy])
-#model.run_eagerly = True
+# model.run_eagerly = True
 
 PATH = DATA_OUT_PATH + MODEL_NAME
 if not (os.path.isdir(PATH)):
@@ -202,10 +212,13 @@ cp_callback = ModelCheckpoint(
 
 earlystop_callback = EarlyStopping(monitor='val_accuracy', min_delta=0.0001, patience=10)
 
+
 history = model.fit([index_inputs, index_outputs], index_targets,
                     batch_size=BATCH_SIZE, epochs=EPOCH,
                     validation_split=VALIDATION_SPLIT, callbacks=[earlystop_callback, cp_callback])
 
+plot_graphs(history, 'accuracy')
+plot_graphs(history, 'loss')
 
 
 SAVE_FILE_NM = "weights.h5"
